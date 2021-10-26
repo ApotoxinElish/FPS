@@ -7,9 +7,9 @@ public class PrototypePistol : AbstractGun
 
     public override void shoot(){
         PrototypeBullet prototypeBulletScript=bullet.GetComponent("PrototypeBullet") as PrototypeBullet;
-        prototypeBulletScript.damage=10;
-        prototypeBulletScript.direction=Vector3.forward;
-        prototypeBulletScript.speed=1;
-        Instantiate(bullet,transform.position,transform.rotation);
+        prototypeBulletScript.damage=bulletDamage;
+        prototypeBulletScript.direction=transform.rotation*Vector3.left;
+        prototypeBulletScript.speed=bulletSpeed;
+        Instantiate(bullet,transform.position,Quaternion.LookRotation(transform.rotation*Vector3.left));
     }
 }

@@ -9,6 +9,9 @@ public class AbstractGun : MonoBehaviour
     public float reloadTime;
     public GameObject bullet;
 
+    public float bulletDamage;
+    public float bulletSpeed;
+
     private int currentAmmunition;
     private float coolDown;
     private bool reloading;

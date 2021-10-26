@@ -10,15 +10,22 @@ public class AbstractBullet : MonoBehaviour
     public float speed;
     public Vector3 direction;
 
+    private Rigidbody rb;
+    private bool onStart=true;
+
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Rigidbody>().velocity = direction * speed;
+        Debug.Log("create a bullet");
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void FixedUpdate(){
+        if(onStart){
+            rb.velocity = direction * speed;
+            Debug.Log($"current speed:{rb.velocity}");
+            onStart=false;
+        }
     }
 }
