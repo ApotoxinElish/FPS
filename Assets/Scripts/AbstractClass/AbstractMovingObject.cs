@@ -1,32 +1,30 @@
 using System;
 using UnityEngine;
 
-namespace MovingController
+namespace AbstractClass
 {
     public abstract class AbstractMovingObject : MonoBehaviour
     {
-        // 可单独挂在对象上
-        // 封装移动，跳跃信息
+        // can be attached on game objects singly,
+        // with moving and jumping functions packaged
         
-        private float _moveSpeed;  // 移动速度
-        private float _moveSpeedBackup;  // 移动速度备份（用于重置）
-        private bool _isMoveable;  // 能否移动flag
+        private float _moveSpeed;  // move speed
+        private float _moveSpeedBackup;  // move speed backup (used for resetting)
+        private bool _isMoveable;  // can move flag
 
-        private float _jumpSpeed;  // 跳跃速度
-        private float _jumpSpeedBackup;  // 跳跃速度备份（用于重置）
-        private bool _canJump = true;  // 能否跳跃（防止空中一直跳）
+        private float _jumpSpeed;  // jump speed (vertical)
+        private float _jumpSpeedBackup;  //  jump speed backup
         
-
         protected void InitMoveSpeed(float speed)
         {
-            // 初始化移动速度
+            // init move speed
             _moveSpeed = speed;
             _moveSpeedBackup = speed;
         }
         
         protected void InitJumpSpeed(float speed)
         {
-            // 初始化跳跃速度
+            // init jump speed
             _jumpSpeed = speed;
             _jumpSpeedBackup = speed;
         }
@@ -43,51 +41,41 @@ namespace MovingController
 
         protected float GetMoveSpeed()
         {
-            // 获取速度
+            // get move speed
             return _moveSpeed;
         }
         
         protected float GetJumpSpeed()
         {
-            // 获取速度
+            // get jump speed
             return _jumpSpeed;
         }
 
 
         public void ResetMoveSpeed()
         {
-            // 重置速度
+            // reset the move speed
             _moveSpeed = _moveSpeedBackup;
         }
         
         public void ResetJumpSpeed()
         {
-            // 重置速度
+            // reset the jump speed
             _jumpSpeed = _jumpSpeedBackup;
         }
         
         public void ForceSetMoveSpeed(float speed)
         {
-            // 强行设置速度
+            // reset the move speed by force (with a given value that might exceed the max value)
             _moveSpeed = speed;
         }
         
         public void ForceSetJumpSpeed(float speed)
         {
-            // 强行设置速度
+            // reset the jump speed by force (with a given value that might exceed the max value)
             _jumpSpeed = speed;
         }
-        
-        protected bool CanJump()
-        {
-            return _canJump;
-        }
 
-        public abstract bool CanMove();  // 判断能否移动，需子类完善
-
-        protected void SetJumpFlag(bool flag)
-        {
-            _canJump = flag;
-        }
+        public abstract bool CanMove();  // judge whether it meets the requirements of moving
     }
 }

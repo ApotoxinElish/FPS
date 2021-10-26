@@ -7,7 +7,7 @@ namespace Managers
     {
         private void Start()
         {
-            // 隐藏鼠标
+            // hide cursor
             Cursor.visible = false;
         }
     }

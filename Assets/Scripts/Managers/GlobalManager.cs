@@ -5,15 +5,15 @@ namespace Managers
 {
     public class GlobalManager : MonoBehaviour
     {
-        // 该类管理全局变量
-        public GameObject mainPlayer;  // 主玩家
-        public int mainPlayerInstanceID;  // 主玩家ID
+        // global variable management
+        public GameObject mainPlayer;  // the main player
+        public int mainPlayerInstanceID;  // the ID of the main player
         
-        public bool isGamePaused = false;  // 游戏是否暂停
+        public bool isGamePaused = false;  // is the game paused
 
         public static GlobalManager Instance { get; private set; }
 
-        // 键盘键位绑定
+        // keyboard key binding
         public Dictionary<string, KeyCode> KeyBinding = new Dictionary<string, KeyCode>
         {
             {"player move forward", KeyCode.W},
@@ -26,33 +26,32 @@ namespace Managers
 
         public void ResetKeyBinding(string keyName, KeyCode keyCode)
         {
-            // 重置按键
+            // reset the keyboard key binding
             KeyBinding[keyName] = keyCode;
         }
 
         private void Awake()
         {
-            // 需放在Awake()里，其他脚本Start()会调用该Instance
             Instance = this;
-            mainPlayer = GameObject.Find("Player");  // 绑定主玩家
+            mainPlayer = GameObject.Find("Player");  // get the main player game object (must be in the hierarchy)
             mainPlayerInstanceID = mainPlayer.GetInstanceID();
         }
 
         public void GamePause()
         {
-            // 暂停游戏
+            // pause the game
             isGamePaused = true;
         }
     
         public void GameResume()
         {
-            // 恢复游戏
+            // resume the game
             isGamePaused = false;
         }
 
         // private void Update()
         // {
-        //     // 检测游戏暂停
+        //     // press "Esc" button to pause the game
         //     if (!Input.GetKeyDown(KeyCode.Escape)) return;
         //     if (isGamePaused)
         //     {

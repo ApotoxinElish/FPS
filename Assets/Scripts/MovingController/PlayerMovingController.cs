@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using Managers;
+using AbstractClass;
 
 namespace MovingController
 {
     public class PlayerMovingController : AbstractMovingObject
     {
-        // 玩家移动
+        // player moving controller
         private Rigidbody _rgBody;
 
         private bool _moveForward = false;
@@ -18,6 +19,7 @@ namespace MovingController
         public float playerMoveSpeed;
         public float playerJumpSpeed;
         public float gravitySpeed;
+        public float capsColdRadiusOffsetFactor = 0.5f;  // (0.5 recommended)
 
         // keycodes
         private KeyCode _moveForwardKey;
@@ -27,12 +29,13 @@ namespace MovingController
         private KeyCode _jumpKey;
         private KeyCode _dodgeKey;
         
-        // 用于跳跃键后的地面检测
+        // for detecting whether the player is grounded
         private CapsuleCollider _capsCold;
         private float _capsColdRadius;
         private Vector3 _capsPointUp;
         private Vector3 _capsPointDown;
-        public float overLapCapsuleOffset = 1.1f;
+        public float overLapCapsuleOffset = 1.55f;  // (1.5 recommended)
+        private bool _stayUngrounded;  // flag representing whether the the player is grounded
 
         private void Start()
         {
@@ -51,12 +54,12 @@ namespace MovingController
             _dodgeKey = GlobalManager.Instance.KeyBinding["player dodge"];
             
             // jump related
-            _capsColdRadius = _capsCold.radius * 0.6f;
+            _capsColdRadius = _capsCold.radius * capsColdRadiusOffsetFactor;
         }
 
         private void GetInputMove()
         {
-            // 获取键盘输入
+            // get keyboard input
             _moveForward = Input.GetKey(_moveForwardKey);
             _moveBackward = Input.GetKey(_moveBackwardKey);
             _moveLeft = Input.GetKey(_moveLeftKey);
@@ -76,12 +79,12 @@ namespace MovingController
 
         private void Update()
         {
-            GetInputMove();
+            GetInputMove(); // get keyboard input
             
-            // 玩家跳跃，放fixedUpdate里会卡
+            // can not place the codes in FixedUpdate()!!!
             if (_playerJump)
             {
-                // 玩家跳跃时地面检测
+                // detect whether the player is grounded
                 var transform1 = transform;
                 var up = transform1.up;
                 var position = transform1.position;
@@ -92,6 +95,7 @@ namespace MovingController
                 // Debug.DrawLine(_capsPointDown, _capsPointUp, Color.green);
                 if (outputCols.Length != 0)
                 {
+                    // the player is grounded, then player jumps
                     Debug.Log("player jump");
                     _rgBody.AddForce(Vector3.up * 1000f);
 
@@ -103,7 +107,7 @@ namespace MovingController
 
         private void FixedUpdate()
         {
-            // 玩家移动
+            // player moving, adding force to rigidBody
             if (CanMove())
             {
                 var p = _rgBody.position;
@@ -111,7 +115,7 @@ namespace MovingController
                 var facing = transform1.forward;
                 var right = transform1.right;
                 
-                // 斜着走，x，y方向速度除根2
+                // when moving with 45 degree, force on x, y axis should be divided by root 2
                 if (_moveForward && _moveLeft)
                 {
                     _rgBody.AddForce(facing * playerMoveSpeed / 1.414f);
@@ -142,7 +146,7 @@ namespace MovingController
                 else if (_moveRight) _rgBody.AddForce(right * playerMoveSpeed);
             }
 
-            // 重力
+            // the code-made gravity
             _rgBody.AddForce(Vector3.down * gravitySpeed);
         }
     }
