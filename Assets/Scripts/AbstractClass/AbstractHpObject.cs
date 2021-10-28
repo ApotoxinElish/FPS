@@ -6,7 +6,7 @@ namespace AbstractClass
     public abstract class AbstractHpObject : MonoBehaviour
     {
         // attached to objects with the HP property
-        
+
         private int _hp;  // current hp
         private int _hpMax;  // max hp
         private bool _isInvincible = false;  // whether it is invincible

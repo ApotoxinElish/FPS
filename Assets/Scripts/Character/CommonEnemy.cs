@@ -6,7 +6,7 @@ namespace Character
     public class CommonEnemy : AbstractHpObject
     {
         // the most common enemy, can be inherited
-        
+
         public int hp;
         public string enemyName;
 

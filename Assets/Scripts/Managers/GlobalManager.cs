@@ -8,7 +8,7 @@ namespace Managers
         // global variable management
         public GameObject mainPlayer;  // the main player
         public int mainPlayerInstanceID;  // the ID of the main player
-        
+
         public bool isGamePaused = false;  // is the game paused
 
         public static GlobalManager Instance { get; private set; }
@@ -42,7 +42,7 @@ namespace Managers
             // pause the game
             isGamePaused = true;
         }
-    
+
         public void GameResume()
         {
             // resume the game

@@ -28,7 +28,7 @@ namespace MovingController
         private KeyCode _moveRightKey;
         private KeyCode _jumpKey;
         private KeyCode _dodgeKey;
-        
+
         // for detecting whether the player is grounded
         private CapsuleCollider _capsCold;
         private float _capsColdRadius;
@@ -52,7 +52,7 @@ namespace MovingController
             _moveRightKey = GlobalManager.Instance.KeyBinding["player move right"];
             _jumpKey = GlobalManager.Instance.KeyBinding["player jump"];
             _dodgeKey = GlobalManager.Instance.KeyBinding["player dodge"];
-            
+
             // jump related
             _capsColdRadius = _capsCold.radius * capsColdRadiusOffsetFactor;
         }
@@ -80,7 +80,7 @@ namespace MovingController
         private void Update()
         {
             GetInputMove(); // get keyboard input
-            
+
             // can not place the codes in FixedUpdate()!!!
             if (_playerJump)
             {
@@ -88,7 +88,7 @@ namespace MovingController
                 var transform1 = transform;
                 var up = transform1.up;
                 var position = transform1.position;
-                _capsPointUp =  position + up * _capsCold.height - up * _capsColdRadius;
+                _capsPointUp = position + up * _capsCold.height - up * _capsColdRadius;
                 _capsPointDown = position + up * _capsColdRadius - up * overLapCapsuleOffset;
                 LayerMask ignoreMask = (1 << 6);
                 var outputCols = Physics.OverlapCapsule(_capsPointDown, _capsPointUp, _capsColdRadius, ignoreMask);
@@ -103,7 +103,7 @@ namespace MovingController
             }
 
         }
-        
+
 
         private void FixedUpdate()
         {
@@ -114,7 +114,7 @@ namespace MovingController
                 var transform1 = transform;
                 var facing = transform1.forward;
                 var right = transform1.right;
-                
+
                 // when moving with 45 degree, force on x, y axis should be divided by root 2
                 if (_moveForward && _moveLeft)
                 {

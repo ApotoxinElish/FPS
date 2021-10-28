@@ -16,11 +16,11 @@ namespace MovingController
 
         public GameObject aimObject;  // aim object
         public CinemachineVirtualCamera virtualCamera;  // virtual camera script
-        
-        private readonly float[] _rotateRangeX = {-83f, 73f};
+
+        private readonly float[] _rotateRangeX = { -83f, 73f };
         private float _angleX;
-        
-        private readonly float[] _viewFieldRange = {12f, 60f};  // change the field of view
+
+        private readonly float[] _viewFieldRange = { 12f, 60f };  // change the field of view
         public float viewFieldChangeSpeed;
         private bool _viewFieldScaling;  // is changing the field of view
 
@@ -51,23 +51,23 @@ namespace MovingController
                 _viewFieldScaling = false;
                 _playerRotateSpeed = playerRotateSpeedOri;
             }
-          
+
             if (_viewFieldScaling)
             {
                 // decrease field of view
                 virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(virtualCamera.m_Lens.FieldOfView,
-                    _viewFieldRange[0],Time.deltaTime * viewFieldChangeSpeed);
+                    _viewFieldRange[0], Time.deltaTime * viewFieldChangeSpeed);
             }
             else if (virtualCamera.m_Lens.FieldOfView < 59)
             {
                 // field if view resumes
                 virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(virtualCamera.m_Lens.FieldOfView,
-                    _viewFieldRange[1],Time.deltaTime * viewFieldChangeSpeed);
+                    _viewFieldRange[1], Time.deltaTime * viewFieldChangeSpeed);
                 Debug.Log(1);
             }
-            
+
         }
-        
+
         private void ChangeYRotationWithValue(float value)
         {
             // aim view turning horizontally
@@ -78,7 +78,7 @@ namespace MovingController
             transformRotation.eulerAngles = transformRotationEulerAngles;
             transform1.rotation = transformRotation;
         }
-        
+
         private void ChangeXRotationToValue(float value)
         {
             // aim view turning vertically
