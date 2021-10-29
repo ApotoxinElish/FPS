@@ -20,7 +20,7 @@ namespace MovingController
         private readonly float[] _rotateRangeX = { -83f, 73f };
         private float _angleX;
 
-        private readonly float[] _viewFieldRange = { 12f, 60f };  // change the field of view
+        private readonly float[] _viewFieldRange = { 30f, 60f };  // change the field of view
         public float viewFieldChangeSpeed;
         private bool _viewFieldScaling;  // is changing the field of view
 
@@ -63,7 +63,6 @@ namespace MovingController
                 // field if view resumes
                 virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(virtualCamera.m_Lens.FieldOfView,
                     _viewFieldRange[1], Time.deltaTime * viewFieldChangeSpeed);
-                Debug.Log(1);
             }
 
         }

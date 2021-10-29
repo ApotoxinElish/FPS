@@ -90,7 +90,7 @@ namespace MovingController
                 var position = transform1.position;
                 _capsPointUp = position + up * _capsCold.height - up * _capsColdRadius;
                 _capsPointDown = position + up * _capsColdRadius - up * overLapCapsuleOffset;
-                LayerMask ignoreMask = (1 << 6);
+                LayerMask ignoreMask = (1 << 6 | 1 << 9);  // player can jump on ground and enemies
                 var outputCols = Physics.OverlapCapsule(_capsPointDown, _capsPointUp, _capsColdRadius, ignoreMask);
                 // Debug.DrawLine(_capsPointDown, _capsPointUp, Color.green);
                 if (outputCols.Length != 0)
