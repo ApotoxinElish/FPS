@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AbstractRifle : AbstractGun
+public abstract class AbstractPistol : AbstractGun
 {
+
     void Update()
     {
         coolDown+=Time.deltaTime;
         currentReloadTime+=Time.deltaTime;
 
-        if(Input.GetKey("mouse 0")){
+        if(Input.GetButtonDown("Fire1")){
             Debug.Log("try to fire");
 
             if(reloading==true){

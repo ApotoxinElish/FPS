@@ -29,11 +29,18 @@ namespace UIFramework.Managers
 
         private Dictionary<CrossHair, Sprite> crossHairSprites;
         private Image _crossHairImage;  // the image component
+        public Vector3 targetPoint;
+        private RaycastHit hitInfo;
+
+        public GameObject testBall;
+        
+        public static AimCrossHairManager Instance { get; private set; }
 
         // private CrossHair _crossHair = CrossHair.Pistol;  // the current cross hair used
 
         private void Awake()
         {
+            Instance = this;
             crossHairSprites = new Dictionary<CrossHair, Sprite>
             {
                 {CrossHair.Pistol, pistolCrossHair},
@@ -49,13 +56,16 @@ namespace UIFramework.Managers
         {
             if (detectingEnemyAiming)
             {
-                if (Physics.Raycast(virtualCamera.position, virtualCamera.forward,
-                    enemyDetectRaycastDistance, LayerMask.GetMask($"Enemy")))
+                var ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+                if (Physics.Raycast(ray, out hitInfo))
                 {
-                    TargetEnemy();
+                    targetPoint = hitInfo.point;  //记录碰撞的目标点
+                    if (hitInfo.collider.gameObject.layer == 9) TargetEnemy();
+                    else LoseEnemyTargeting();
                 }
-                else LoseEnemyTargeting();
-                Debug.DrawRay(virtualCamera.position, virtualCamera.forward * enemyDetectRaycastDistance, Color.green); // debug
+                else targetPoint = ray.direction * 500;
+
+                testBall.transform.position = targetPoint;
             }
         }
 

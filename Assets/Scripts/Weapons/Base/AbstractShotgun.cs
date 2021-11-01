@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AbstractPistol : AbstractGun
-{
 
+public abstract class AbstractShotgun : AbstractGun
+{
+    public int projectile;
+
+    public float maxScatteringRadian;
     void Update()
     {
         coolDown+=Time.deltaTime;
@@ -44,12 +47,27 @@ public abstract class AbstractPistol : AbstractGun
             
         }
     }
-    public override void shoot(){
-        GameObject currentBullet=Instantiate(bullet,transform.position,Quaternion.LookRotation(transform.rotation*Vector3.forward));
-        PrototypeBullet prototypeBulletScript=currentBullet.GetComponent("PrototypeBullet") as PrototypeBullet;
-        prototypeBulletScript.damage=bulletDamage;
-        prototypeBulletScript.direction=transform.rotation*Vector3.right;
-        prototypeBulletScript.speed=bulletSpeed;
+
+    Quaternion getScattering(float maxRadian){
+        float radius=Random.Range(0,(float)System.Math.Tan(maxRadian));
+        float radian=Random.Range(0,360);
+        Vector3 randomPoint = new Vector3(1f,radius*(float)System.Math.Cos(radian),radius*(float)System.Math.Sin(radian));
+        randomPoint.Normalize();
+
+        Quaternion scattering=Quaternion.FromToRotation(new Vector3(1,0,0),randomPoint);
+
+        return scattering;
     }
 
+    public override void shoot(){
+        for(int i=0;i<projectile;i++){
+            Quaternion scattering=getScattering(maxScatteringRadian);
+            GameObject currentBullet=Instantiate(bullet,transform.position,scattering*transform.rotation);
+            PrototypeBullet prototypeBulletScript=currentBullet.GetComponent("PrototypeBullet") as PrototypeBullet;
+            prototypeBulletScript.damage=bulletDamage;
+            prototypeBulletScript.direction=(transform.rotation*scattering*Vector3.right);
+            prototypeBulletScript.speed=bulletSpeed;
+        }
+
+    }
 }

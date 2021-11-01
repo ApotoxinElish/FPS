@@ -12,12 +12,12 @@ namespace MovingController
         private bool _playerRotatable = true;  // is the player rotatable
         private float _playerRotateSpeed;  // player rotation angular speed
         public float playerRotateSpeedOri;  // player rotation angular speed commonly (1.5)
-        public float playerRotateSpeedLow;  // player rotation angular speed when scaling view filed (0.3)
+        public float playerRotateSpeedLow;  // player rotation angular speed when scaling view filed (0.5)
 
         public GameObject aimObject;  // aim object
         public CinemachineVirtualCamera virtualCamera;  // virtual camera script
 
-        private readonly float[] _rotateRangeX = { -83f, 73f };
+        private readonly float[] _rotateRangeX = { -83f, 33f };
         private float _angleX;
 
         private readonly float[] _viewFieldRange = { 30f, 60f };  // change the field of view
