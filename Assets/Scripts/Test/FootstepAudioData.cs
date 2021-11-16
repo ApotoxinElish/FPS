@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// [CreateAssetMenu(menuName = "FPS/Footstep Audio Data")]
+[CreateAssetMenu(menuName = "FPS/Footstep Audio Data")]
 public class FootstepAudioData : ScriptableObject
 {
     public List<FootstepAudio> FootstepAudios = new List<FootstepAudio>();
 }
 
 
-// [System.Serializable]
+[System.Serializable]
 public class FootstepAudio
 {
     public string Tag;
