@@ -17,6 +17,17 @@ namespace Character
         protected override void ZeroHpHandle()
         {
             Debug.Log($"Enemy with id {GetInstanceID()} retired with 0 hp");
+            Destroy(this);
+        }
+
+        private void OnTriggerEnter(Collider other) {
+            GameObject otherObj=other.gameObject;
+            if(otherObj.layer==LayerMask.NameToLayer("pBullet")){
+                Debug.Log("hit");
+                AbstractBullet bulletScript=otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
+                hp=hp-(int)bulletScript.damage;
+                Destroy(otherObj);
+            }
         }
     }
 }

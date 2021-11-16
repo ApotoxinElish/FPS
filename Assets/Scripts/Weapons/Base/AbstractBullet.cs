@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AbstractBullet : MonoBehaviour
+public class AbstractBullet : MonoBehaviour
 {
 
 
@@ -20,6 +20,11 @@ public abstract class AbstractBullet : MonoBehaviour
         rb.velocity = direction * speed;
         Debug.Log($"current speed:{rb.velocity}");
     }
+
+    private void OnTriggerEnter(Collider other) {
+            Destroy(this);
+    }
+
 
 
 

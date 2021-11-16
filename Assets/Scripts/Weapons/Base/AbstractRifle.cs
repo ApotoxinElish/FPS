@@ -5,50 +5,9 @@ using UnityEngine;
 
 public abstract class AbstractRifle : AbstractGun
 {
-    void Update()
+
+    public override bool inputActivate()
     {
-        coolDown+=Time.deltaTime;
-        currentReloadTime+=Time.deltaTime;
-
-        if(Input.GetKey("mouse 0")){
-            Debug.Log("try to fire");
-
-            if(reloading==true){
-                Debug.Log("reloading");
-                if(currentReloadTime>=reloadTime){
-                    reloading=false;
-                    Debug.Log("finish reloading");
-                }
-            }
-            else
-            {
-                if(currentAmmunition<=0){
-                    Debug.Log("start to reload");
-                    reload();
-                    reloading=true;
-                    currentReloadTime=0;
-                    currentAmmunition=ammunition;
-                }
-
-                else if(coolDown >= 1/fireRate){
-                    shoot();
-                    coolDown=0;
-                    currentAmmunition--;
-                    Debug.Log($"shoot {currentAmmunition} left");
-                }
-                else
-                {
-                    Debug.Log("cooldowning");
-                }
-            }
-            
-        }
-    }
-    public override void shoot(){
-        GameObject currentBullet=Instantiate(bullet,transform.position,Quaternion.LookRotation(transform.rotation*Vector3.forward));
-        PrototypeBullet prototypeBulletScript=currentBullet.GetComponent("PrototypeBullet") as PrototypeBullet;
-        prototypeBulletScript.damage=bulletDamage;
-        prototypeBulletScript.direction=AimCrossHairManager.Instance.targetPoint;  // 修改角度 transform.rotation*Vector3.right
-        prototypeBulletScript.speed=bulletSpeed;
+        return Input.GetKey("mouse 0");
     }
 }

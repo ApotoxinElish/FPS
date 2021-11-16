@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,13 +11,11 @@ public class FPMouseLook : MonoBehaviour
     public float MouseSensitivity;
     public Vector2 MaxminAngle;
 
-    // Start is called before the first frame update
     private void Start()
     {
         cameraTransform = transform;
     }
 
-    // Update is called once per frame
     void Update()
     {
         var tmp_MouseX = Input.GetAxis("Mouse X");

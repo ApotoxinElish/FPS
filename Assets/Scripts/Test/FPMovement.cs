@@ -1,17 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class FPMovement : MonoBehaviour
 {
     public float Speed;
+    public float JumpHeight;
     public float Gravity;
 
     private Transform characterTransform;
     private Rigidbody characterRigidbody;
     private bool isGrounded;
 
-    // Start is called before the first frame update
     void Start()
     {
         characterTransform = transform;
@@ -34,8 +36,22 @@ public class FPMovement : MonoBehaviour
             tmp_VelocityChange.y = 0;
 
             characterRigidbody.AddForce(tmp_VelocityChange, ForceMode.VelocityChange);
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                characterRigidbody.velocity = new Vector3(tmp_CurrentVelocity.x, CalculateJumpHeightSpeed(),
+                    tmp_CurrentVelocity.z);
+            }
         }
+
+        characterRigidbody.AddForce(new Vector3(0, -Gravity * characterRigidbody.mass, 0));
     }
+
+    private float CalculateJumpHeightSpeed()
+    {
+        return Mathf.Sqrt(2 * Gravity * JumpHeight);
+    }
+
 
     private void OnCollisionStay(Collision _other)
     {

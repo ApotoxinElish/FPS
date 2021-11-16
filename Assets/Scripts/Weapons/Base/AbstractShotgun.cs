@@ -8,64 +8,31 @@ public abstract class AbstractShotgun : AbstractGun
     public int projectile;
 
     public float maxScatteringRadian;
-    void Update()
-    {
-        coolDown+=Time.deltaTime;
-        currentReloadTime+=Time.deltaTime;
 
-        if(Input.GetButtonDown("Fire1")){
-            Debug.Log("try to fire");
 
-            if(reloading==true){
-                Debug.Log("reloading");
-                if(currentReloadTime>=reloadTime){
-                    reloading=false;
-                    Debug.Log("finish reloading");
-                }
-            }
-            else
-            {
-                if(currentAmmunition<=0){
-                    Debug.Log("start to reload");
-                    reload();
-                    reloading=true;
-                    currentReloadTime=0;
-                    currentAmmunition=ammunition;
-                }
-
-                else if(coolDown >= 1/fireRate){
-                    shoot();
-                    coolDown=0;
-                    currentAmmunition--;
-                    Debug.Log($"shoot {currentAmmunition} left");
-                }
-                else
-                {
-                    Debug.Log("cooldowning");
-                }
-            }
-            
-        }
-    }
 
     Quaternion getScattering(float maxRadian){
-        float radius=Random.Range(0,(float)System.Math.Tan(maxRadian));
-        float radian=Random.Range(0,360);
-        Vector3 randomPoint = new Vector3(1f,radius*(float)System.Math.Cos(radian),radius*(float)System.Math.Sin(radian));
-        randomPoint.Normalize();
 
-        Quaternion scattering=Quaternion.FromToRotation(new Vector3(1,0,0),randomPoint);
+        float radian=Random.Range(0,maxRadian);
+        float xRotation=Random.Range(0,360);
+
+        Vector3 direction=new Vector3(Mathf.Cos(radian),Mathf.Sin(radian),0);
+        direction=Quaternion.Euler(xRotation,0,0)*direction;
+        Quaternion scattering=Quaternion.FromToRotation(new Vector3(1,0,0),direction);
+        Debug.Log($"radian {radian}, xr {xRotation}, dir {direction}");
 
         return scattering;
     }
 
     public override void shoot(){
+        coolDown=0;
+        currentAmmunition--;
         for(int i=0;i<projectile;i++){
             Quaternion scattering=getScattering(maxScatteringRadian);
-            GameObject currentBullet=Instantiate(bullet,transform.position,scattering*transform.rotation);
+            GameObject currentBullet=Instantiate(bullet,transform.position,Quaternion.LookRotation(scattering*(transform.rotation*Vector3.forward)));
             PrototypeBullet prototypeBulletScript=currentBullet.GetComponent("PrototypeBullet") as PrototypeBullet;
             prototypeBulletScript.damage=bulletDamage;
-            prototypeBulletScript.direction=(transform.rotation*scattering*Vector3.right);
+            prototypeBulletScript.direction=(scattering*(transform.rotation*Vector3.forward));
             prototypeBulletScript.speed=bulletSpeed;
         }
 
