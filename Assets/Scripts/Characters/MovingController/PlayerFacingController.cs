@@ -6,6 +6,14 @@ namespace MovingController
 {
     public class PlayerFacingController : MonoBehaviour
     {
+        /// <summary>
+        /// This program changes the camera focusing.
+        /// the camera follows the aim and looks at aim point
+        /// Rotation around Y axis, rotate the player
+        /// rotation around the X axis, rotate the aim position
+        /// use lerp to change the field of view 
+        /// </summary>
+        /// 
         // player orientation
         // private Vector3 _facingVector;
         // private Vector3 _facingOriVector = Vector3.forward;
@@ -17,13 +25,13 @@ namespace MovingController
         public GameObject aimObject;  // aim object
         public CinemachineVirtualCamera virtualCamera;  // virtual camera script
 
-        private readonly float[] _rotateRangeX = { -83f, 33f };
+        private readonly float[] _rotateRangeX = { -83f, 33f }; // once set it can't be changed
         private float _angleX;
 
         private readonly float[] _viewFieldRange = { 30f, 60f };  // change the field of view
         public float viewFieldChangeSpeed;
         private bool _viewFieldScaling;  // is changing the field of view
-
+        private float dt = 1; //24 * Time.deltaTime; // this is the attempt to eliminate the quivering of camera 
         private void Start()
         {
             _playerRotateSpeed = playerRotateSpeedOri;
@@ -33,11 +41,11 @@ namespace MovingController
         {
             if (_playerRotatable)
             {
-                ChangeYRotationWithValue(Input.GetAxis("Mouse X") * _playerRotateSpeed);
-                _angleX += Input.GetAxis("Mouse Y") * -_playerRotateSpeed;
-                if (_angleX < _rotateRangeX[0]) _angleX = _rotateRangeX[0];
+                ChangeYRotationWithValue(Input.GetAxis("Mouse X") * _playerRotateSpeed *dt); // rotate around Y axis
+                _angleX += Input.GetAxis("Mouse Y") * -_playerRotateSpeed*dt; // calculate the Y (vertical) with limitation
+                if (_angleX < _rotateRangeX[0]) _angleX = _rotateRangeX[0]; 
                 else if (_angleX > _rotateRangeX[1]) _angleX = _rotateRangeX[1];
-                ChangeXRotationToValue(_angleX);
+                ChangeXRotationToValue(_angleX); // change the rotate
             }
 
             // filed of view scale
@@ -70,7 +78,7 @@ namespace MovingController
         private void ChangeYRotationWithValue(float value)
         {
             // aim view turning horizontally
-            var transform1 = transform;
+            var transform1 = transform; // the shaking problem could also caused by the rotation center problem
             var transformRotation = transform1.rotation;
             var transformRotationEulerAngles = transformRotation.eulerAngles;
             transformRotationEulerAngles.y += value;
