@@ -17,7 +17,6 @@ namespace Characters.MovingController
 
         private Seeker _seeker;
         private Rigidbody _rgBody;
-        private Collider _collider;
 
         private bool _startMoving;
 
@@ -30,7 +29,6 @@ namespace Characters.MovingController
             InitMoveSpeed(moveSpeed);
             _seeker = GetComponent<Seeker>();
             _rgBody = GetComponent<Rigidbody>();
-            _collider = GetComponent<Collider>();
         }
 
         public void MoveToTarget(Vector3 targetPosition)

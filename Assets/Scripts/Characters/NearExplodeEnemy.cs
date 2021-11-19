@@ -3,17 +3,21 @@ using UnityEngine;
 
 namespace Characters
 {
-    public enum CommonEnemyState
+    public enum NearExplodeEnemyState
     {
-        
+        Roam = 0,
+        Idle = 1,
+        Chase = 2,
     }
     
-    public class CommonEnemy : RangeCheckingEnemy
+    public class NearExplodeEnemy : RangeCheckingEnemy
     {
         // the most common enemy, can be inherited
 
         public int hp;
         public string enemyName;
+
+        private Transform _chasingTarget;
 
         private void Start()
         {
