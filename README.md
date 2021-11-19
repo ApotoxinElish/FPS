@@ -41,3 +41,24 @@ This is a description.
 > Lighting and Shadow  
 > Collider and collision detect  
 > Camera, AI, Audio, Vibration, Input
+
+# Characters
+
+- Moving Controller
+  1. Player Facing Controller
+     Used to controll camera
+  2. Player Moving Controller
+     Used to controll player moving
+- Managers
+  1. Cursor Manager
+     Used to controll cursor layout
+  2. Global Manager
+     Used to controll whole game, pause, resume
+-
+
+- AstarPathfinding
+
+# UI Framework
+
+1. Scene
+2. UI

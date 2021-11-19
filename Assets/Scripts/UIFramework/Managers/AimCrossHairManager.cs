@@ -4,7 +4,13 @@ using UnityEngine.UI;
 
 namespace UIFramework.Managers
 {
-    public enum CrossHair
+    /// <summary>
+    /// initialize: create a Sprite directory, enum for mapping
+    /// assign the gun type with different sprite (awake)
+    /// check the ray cast of the middle of the camera, if hit, change color
+    /// further design on the sprite could be modify in the if-else statement.
+    /// </summary>
+    public enum CrossHair // CrossHair.Pistol(CrossHair.Name) = 0 
     {
         Pistol = 0,
         Rifle = 1,
@@ -14,26 +20,26 @@ namespace UIFramework.Managers
     public class AimCrossHairManager : MonoBehaviour
     {
         // a class to manage the cross hair UI
-
+        // the Cross shapes in Sprite
         public Sprite pistolCrossHair;
         public Sprite rifleCrossHair;
         public Sprite shotgunCrossHair;
 
-        [Space]
-        public Color crossHaiOriginalColor;
-        public Color targetingEnemyColor;
-        public Transform virtualCamera;
+        [Space] // show a space in the inspector
+        public Color crossHaiOriginalColor; // the normal color without targeting
+        public Color targetingEnemyColor; // the color when move on enemy 
+        public Transform virtualCamera; // not used
 
         [Space] public bool detectingEnemyAiming = true;
         public float enemyDetectRaycastDistance = 10f;
 
-        private Dictionary<CrossHair, Sprite> crossHairSprites;
+        private Dictionary<CrossHair, Sprite> crossHairSprites; // directory: a data struc to hold the Sprite
         private Image _crossHairImage;  // the image component
         public Vector3 targetPoint;
         private RaycastHit hitInfo;
 
         public GameObject testBall;
-        
+
         public static AimCrossHairManager Instance { get; private set; }
 
         // private CrossHair _crossHair = CrossHair.Pistol;  // the current cross hair used
@@ -41,15 +47,15 @@ namespace UIFramework.Managers
         private void Awake()
         {
             Instance = this;
-            crossHairSprites = new Dictionary<CrossHair, Sprite>
+            crossHairSprites = new Dictionary<CrossHair, Sprite> // initialize variety of Sprites
             {
                 {CrossHair.Pistol, pistolCrossHair},
                 {CrossHair.Rifle, rifleCrossHair},
                 {CrossHair.Shotgun, shotgunCrossHair},
             };
-            _crossHairImage = GetComponent<Image>();
+            _crossHairImage = GetComponent<Image>(); // get the image component
 
-            ChangeCrossHair(CrossHair.Rifle);
+            ChangeCrossHair(CrossHair.Rifle);  // assign different image to _crossHairImage
         }
 
         private void Update()
@@ -80,7 +86,6 @@ namespace UIFramework.Managers
             // cross hair turns red when aiming at enemies
             _crossHairImage.color = targetingEnemyColor;
         }
-
         private void LoseEnemyTargeting()
         {
             // cross hair turns white losing targeting enemies
