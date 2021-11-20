@@ -12,7 +12,7 @@ namespace Characters
         Chase = 2,
         Explode = 3,
     }
-    
+
     public class NearExplodeEnemy : RangeCheckingEnemy
     {
         // the most common enemy, can be inherited
@@ -24,7 +24,7 @@ namespace Characters
         public float exitRangeRadius;
         public GameObject explodeRangeChecker;
         public GameObject explodeRangeParticle;
-        
+
         private EnemyMovingController _movingControllerScript;
         private NearExplodeEnemyState _state;
         private GameObject _chasingTarget;
@@ -33,7 +33,7 @@ namespace Characters
         private static readonly int Idle = Animator.StringToHash("idle");
         private static readonly int Chase = Animator.StringToHash("chase");
         private static readonly int Explode = Animator.StringToHash("explode");
-        
+
         // debug
         float m_Theta = 0.1f;
 
@@ -50,11 +50,13 @@ namespace Characters
             Destroy(this);
         }
 
-        private void OnTriggerEnter(Collider other) {
-            GameObject otherObj=other.gameObject;
-            if (otherObj.layer == LayerMask.NameToLayer("pBullet")){
+        private void OnTriggerEnter(Collider other)
+        {
+            GameObject otherObj = other.gameObject;
+            if (otherObj.layer == LayerMask.NameToLayer("pBullet"))
+            {
                 Debug.Log("hit");
-                AbstractBullet bulletScript=otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
+                AbstractBullet bulletScript = otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
                 hp = hp - (int)bulletScript.damage;
                 Destroy(otherObj);
             }
@@ -111,7 +113,7 @@ namespace Characters
                 _animator.SetTrigger(Idle);
             }
         }
-        
+
         // evoked by animator
         private void AddExplodeRangeChecker()
         {
@@ -121,7 +123,7 @@ namespace Characters
             pos.y -= 1f;
             Instantiate(explodeRangeChecker, pos, Quaternion.identity);
         }
-        
+
         private void SelfDestroy()
         {
             Destroy(gameObject);
@@ -133,7 +135,7 @@ namespace Characters
             // 设置颜色
             Color defaultColor = Gizmos.color;
             Gizmos.color = Color.green;
-            
+
             // 设置矩阵
             Matrix4x4 defaultMatrix = Gizmos.matrix;
             Gizmos.matrix = transform.localToWorldMatrix;
@@ -167,6 +169,6 @@ namespace Characters
             // 恢复默认矩阵
             Gizmos.matrix = defaultMatrix;
         }
-        
+
     }
 }

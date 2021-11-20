@@ -29,7 +29,7 @@ namespace Characters.MovingController
 
         public float calculateNextPathInterval = 3;  // （安路径行走时）重新计算下一次路径的时间间隔
         private float _nextCalculatePathTime;  // 重新计算下一次路径的时间
-        
+
         protected void Start()
         {
             InitMoveSpeed(moveSpeed);
@@ -62,18 +62,18 @@ namespace Characters.MovingController
             _wayPoint = _path.vectorPath[_currentWayPoint];
             _wayPoint.y = _rgBody.position.y;
         }
-        
+
         private void Update()
         {
             if (!_startMoving) return;
-            
+
             // 时间到，重新计算一次路径
             if (Time.time > _nextCalculatePathTime)
             {
                 MoveToTarget(_target);
                 _nextCalculatePathTime = Time.time + calculateNextPathInterval;
             }
-            
+
             if (Vector2.Distance(_rgBody.position, _wayPoint) < nextWayPointDistance)
             {
                 // 移动到离下个路径点很近（由nextWayPointDistance衡量）的位置
@@ -93,7 +93,7 @@ namespace Characters.MovingController
             {
                 //平滑旋转看向某一个点
                 Quaternion quaternion = Quaternion.LookRotation(_wayPoint - transform.position);
-                transform.rotation = Quaternion.Lerp(transform.rotation,quaternion,turningSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.Lerp(transform.rotation, quaternion, turningSpeed * Time.deltaTime);
             }
         }
 
@@ -116,6 +116,6 @@ namespace Characters.MovingController
             _enableMoving = false;
             _startMoving = false;
         }
-        
+
     }
 }

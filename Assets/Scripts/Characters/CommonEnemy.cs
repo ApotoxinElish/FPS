@@ -5,9 +5,9 @@ namespace Characters
 {
     public enum CommonEnemyState
     {
-        
+
     }
-    
+
     public class CommonEnemy : RangeCheckingEnemy
     {
         // the most common enemy, can be inherited
@@ -25,12 +25,14 @@ namespace Characters
             Destroy(this);
         }
 
-        private void OnTriggerEnter(Collider other) {
-            GameObject otherObj=other.gameObject;
-            if(otherObj.layer==LayerMask.NameToLayer("pBullet")){
+        private void OnTriggerEnter(Collider other)
+        {
+            GameObject otherObj = other.gameObject;
+            if (otherObj.layer == LayerMask.NameToLayer("pBullet"))
+            {
                 Debug.Log("hit");
-                AbstractBullet bulletScript=otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
-                hp=hp-(int)bulletScript.damage;
+                AbstractBullet bulletScript = otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
+                hp = hp - (int)bulletScript.damage;
                 Destroy(otherObj);
             }
         }

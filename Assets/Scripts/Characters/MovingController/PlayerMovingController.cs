@@ -150,7 +150,7 @@ namespace MovingController
             // the code-made gravity
             _rgBody.AddForce(Vector3.down * gravitySpeed);
         }
-        
+
         public void PassiveAddForce(Vector3 force)
         {
             if (_posStableSkill) return;

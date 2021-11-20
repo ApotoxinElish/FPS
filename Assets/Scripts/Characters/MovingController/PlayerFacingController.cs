@@ -41,9 +41,9 @@ namespace MovingController
         {
             if (_playerRotatable)
             {
-                ChangeYRotationWithValue(Input.GetAxis("Mouse X") * _playerRotateSpeed *dt); // rotate around Y axis
-                _angleX += Input.GetAxis("Mouse Y") * -_playerRotateSpeed*dt; // calculate the Y (vertical) with limitation
-                if (_angleX < _rotateRangeX[0]) _angleX = _rotateRangeX[0]; 
+                ChangeYRotationWithValue(Input.GetAxis("Mouse X") * _playerRotateSpeed * dt); // rotate around Y axis
+                _angleX += Input.GetAxis("Mouse Y") * -_playerRotateSpeed * dt; // calculate the Y (vertical) with limitation
+                if (_angleX < _rotateRangeX[0]) _angleX = _rotateRangeX[0];
                 else if (_angleX > _rotateRangeX[1]) _angleX = _rotateRangeX[1];
                 ChangeXRotationToValue(_angleX); // change the rotate
             }
