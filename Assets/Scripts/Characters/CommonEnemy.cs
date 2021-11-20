@@ -35,14 +35,25 @@ namespace Characters
             }
         }
 
-        public override void PlayerEnterInnerRange(Collision player)
+        public override void PlayerEnterInnerRange(Collider player)
         {
             throw new System.NotImplementedException();
         }
 
-        public override void PlayerEnterOtterRange(Collision player)
+        public override void PlayerExitInnerRange(Collider player)
         {
             throw new System.NotImplementedException();
         }
+
+        public override void PlayerEnterOuterRange(Collider player)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void PlayerExitOuterRange(Collider player)
+        {
+            throw new System.NotImplementedException();
+        }
+
     }
 }

@@ -36,11 +36,12 @@ public class AbstractGun : MonoBehaviour
         coolDown=0;
         currentAmmunition--;
         GameObject currentBullet=Instantiate(bullet,transform.position,Quaternion.LookRotation(transform.rotation*Vector3.forward));
-        PrototypeBullet prototypeBulletScript=currentBullet.GetComponent("PrototypeBullet") as PrototypeBullet;
+        AbstractBullet prototypeBulletScript=currentBullet.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
         prototypeBulletScript.damage=bulletDamage;
         prototypeBulletScript.direction=transform.rotation*Vector3.forward;
         prototypeBulletScript.speed=bulletSpeed;
     }
+
     public virtual void reload(){
         reloading=true;
         currentReloadTime=0;

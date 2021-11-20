@@ -15,7 +15,7 @@ public class WeaponHolder : MonoBehaviour
         string weaponName= oriWeapon.name.Split('(')[0];
         Debug.Log($"weaponname {weaponName}");
         weapon=Instantiate(oriWeapon,transform.position,transform.rotation,transform);
-        weaponScript=weapon.GetComponent(weaponName) as AbstractGun;
+        weaponScript=weapon.GetComponent(typeof(AbstractGun)) as AbstractGun;
     }
 
     // Update is called once per frame

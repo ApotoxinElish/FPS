@@ -131,7 +131,7 @@ MonoBehaviour:
   reloadTime: 0.5
   bullet: {fileID: 7374703512530933530, guid: bb07141dd89c67042baa0fb011a47e01, type: 3}
   bulletDamage: 10
-  bulletSpeed: 1
+  bulletSpeed: 100
 --- !u!1 &7632038770861508263
 GameObject:
   m_ObjectHideFlags: 0

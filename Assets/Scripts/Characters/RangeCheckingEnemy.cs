@@ -7,7 +7,9 @@ namespace Characters
     {
         // Enemy that has ranges to check whether player is in range
         
-        public abstract void PlayerEnterInnerRange(Collision player);
-        public abstract void PlayerEnterOtterRange(Collision player);
+        public virtual void PlayerEnterInnerRange(Collider player) {}
+        public virtual void PlayerExitInnerRange(Collider player) {}
+        public virtual void PlayerEnterOuterRange(Collider player) {}
+        public virtual void PlayerExitOuterRange(Collider player) {}
     }
 }

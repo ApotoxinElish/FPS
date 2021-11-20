@@ -8,9 +8,14 @@ namespace Characters.RangeChecker
     {
         public RangeCheckingEnemy enemyObj;
         
-        private void OnCollisionEnter(Collision other)
+        private void OnTriggerEnter(Collider other)
         {
             enemyObj.PlayerEnterInnerRange(other);
+        }
+        
+        private void OnTriggerExit(Collider other)
+        {
+            enemyObj.PlayerExitInnerRange(other);
         }
     }
 }

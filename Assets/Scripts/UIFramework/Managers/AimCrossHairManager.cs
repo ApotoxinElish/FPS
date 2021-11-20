@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -63,7 +64,7 @@ namespace UIFramework.Managers
             if (detectingEnemyAiming)
             {
                 var ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-                if (Physics.Raycast(ray, out hitInfo))
+                if (Physics.Raycast(ray, out hitInfo, Int32.MaxValue, layerMask:1<<6|1<<7|1<<9|1<<11))
                 {
                     targetPoint = hitInfo.point;  //记录碰撞的目标点
                     if (hitInfo.collider.gameObject.layer == 9) TargetEnemy();

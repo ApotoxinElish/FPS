@@ -15,6 +15,7 @@ namespace MovingController
         private bool _moveRight = false;
         private bool _playerJump = false;
         private bool _playerDodge = false;
+        private bool _posStableSkill;
 
         public float playerMoveSpeed;
         public float playerJumpSpeed;
@@ -148,6 +149,18 @@ namespace MovingController
 
             // the code-made gravity
             _rgBody.AddForce(Vector3.down * gravitySpeed);
+        }
+        
+        public void PassiveAddForce(Vector3 force)
+        {
+            if (_posStableSkill) return;
+            _rgBody.AddForce(force);
+            Debug.Log(force);
+        }
+
+        public Vector3 GetRgBodyPos()
+        {
+            return _rgBody.position;
         }
     }
 }
