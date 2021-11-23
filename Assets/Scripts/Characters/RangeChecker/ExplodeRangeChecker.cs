@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Character;
+using Characters.MovingController;
 using MovingController;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace Characters.RangeChecker
 {
     public class ExplodeRangeChecker : MonoBehaviour
     {
-        public float explodeStrength;
+        public float explosionPower;
 
         private List<int> _effectedObjInstanceIds;
 
@@ -24,9 +25,9 @@ namespace Characters.RangeChecker
             Destroy(gameObject);
         }
 
-        public void SetExplodeStrength(float strength)
+        public void SetExplosionPower(float strength)
         {
-            explodeStrength = strength;
+            explosionPower = strength;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -38,17 +39,22 @@ namespace Characters.RangeChecker
             _effectedObjInstanceIds.Add(instanceId);
 
             var playerScript = other.GetComponent<Player>();
-            var playerControlScript = other.GetComponent<PlayerMovingController>();
+            var playerMovingScript= other.GetComponent<PlayerMovingController>();
             
-            // hurt value is a quarter of (11 - distance)^2 
-            // the max value of _sphereCollider.radius is 15
+            // hurt value is a quarter of (21 - distance)^2 
+            // the max value of _sphereCollider.radius is 20
             var position = transform.position;
-            var playerRgBodyPos = playerControlScript.GetRgBodyPos();
-            var distance = Vector3.Distance(playerRgBodyPos, position);
-            playerScript.Hurt((int)(Math.Pow(16 - distance, 2) * 0.25));
+            position.y -= 1f;
+            var playerPos = other.transform.position;
+            var distance = Vector3.Distance(playerPos, position);
+            
+            // player hurt
+            playerScript.Hurt((int)(Math.Pow(21 - distance, 2) * 0.25));
 
-            var direction = (playerRgBodyPos - position).normalized;
-            playerControlScript.PassiveAddForce(direction * (16 - distance) * explodeStrength);
+            var direction = (playerPos - position).normalized;
+            var force = Mathf.Clamp(explosionPower * (21 - distance), 0, 1000);
+            playerMovingScript.AddImpact(direction, force);
+            Debug.Log("fly");
         }
     }
 }

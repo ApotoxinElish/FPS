@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8216545548309421246}
   - component: {fileID: 356001155869510714}
   - component: {fileID: 3191660109069628723}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: grip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 5578223315764197244}
   - component: {fileID: 3564023504064874500}
   - component: {fileID: 6113658814589876129}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -172,7 +172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4406218659849489708}
   - component: {fileID: 860261062178368535}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: PrototypeRifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

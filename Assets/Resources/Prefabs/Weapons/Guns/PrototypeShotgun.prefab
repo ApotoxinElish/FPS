@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4986765839387058093}
   - component: {fileID: 1255248476049983882}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: PrototypeShotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,7 +64,7 @@ GameObject:
   - component: {fileID: 3853763067659429373}
   - component: {fileID: 5289321515586624133}
   - component: {fileID: 3227552432953337120}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 726642212762144319}
   - component: {fileID: 8998826133429034683}
   - component: {fileID: 6078039182457972658}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: grip
   m_TagString: Untagged
   m_Icon: {fileID: 0}

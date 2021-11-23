@@ -14,18 +14,18 @@ public class MainPanel : BasePanel
 
     public override void OnEnter()
     {
-        UITool.GetOrAddComponentInChildren<Button>("BtnExit").onClick.AddListener(() =>
+        // UITool.GetOrAddComponentInChildren<Button>("BtnExit").onClick.AddListener(() =>
+        // {
+        //     GameRoot.Instance.SceneSystem.SetScene(new StartScene());
+        //     Pop();
+        // });
+        // UITool.GetOrAddComponentInChildren<Button>("BtnMsg").onClick.AddListener(() =>
+        // {
+        //     Push(new TaskPanel());
+        // });
+        UITool.GetOrAddComponentInChildren<Button>("BtnSetting").onClick.AddListener(() =>
         {
-            GameRoot.Instance.SceneSystem.SetScene(new StartScene());
-            Pop();
-        });
-        UITool.GetOrAddComponentInChildren<Button>("BtnMsg").onClick.AddListener(() =>
-        {
-            Push(new TaskPanel());
-        });
-        UITool.GetOrAddComponentInChildren<Button>("BtnOptions").onClick.AddListener(() =>
-        {
-            Push(new OptionsPanel());
+            Push(new SettingPanel());
         });
     }
 }

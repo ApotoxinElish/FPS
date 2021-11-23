@@ -14,16 +14,25 @@ public class StartPanel : BasePanel
 
     public override void OnEnter()
     {
-        UITool.GetOrAddComponentInChildren<Button>("BtnMore").onClick.AddListener(() =>
+        UITool.GetOrAddComponentInChildren<Button>("BtnSetting").onClick.AddListener(() =>
         {
             // Click events can be written in here
             Debug.Log("The More button was clicked");
-            PanelManager.Push(new OptionsPanel());
+            PanelManager.Push(new SettingPanel());
         });
+
         UITool.GetOrAddComponentInChildren<Button>("BtnNewGame").onClick.AddListener(() =>
         {
+            SaveLoadManager.generateDefultJson();
             // Click events can be written in here
-            GameRoot.Instance.SceneSystem.SetScene(new MainScene());
+            GameRoot.Instance.SceneSystem.SetScene(new LevelScene("Level1"));
+        });
+
+        UITool.GetOrAddComponentInChildren<Button>("BtnContinue").onClick.AddListener(() =>
+        {
+            string levelName = SaveLoadManager.getLevelName();
+            // Click events can be written in here
+            GameRoot.Instance.SceneSystem.SetScene(new LevelScene(levelName));
         });
     }
 }

@@ -18,6 +18,7 @@ namespace Characters.MovingController
         private int _currentWayPoint = 0;  // the indexof the surrent
         private Vector3 _wayPoint;
         private int _maxWayPoint;
+        private CharacterController _characterController;
 
         private Seeker _seeker;
         private Rigidbody _rgBody;
@@ -25,7 +26,6 @@ namespace Characters.MovingController
         private bool _startMoving;
         private bool _enableMoving;
         private bool _isFaceTurning;
-        private Vector3 _smallVector = new Vector3(1f, 1f, 1f);
 
         public float calculateNextPathInterval = 3;  // （安路径行走时）重新计算下一次路径的时间间隔
         private float _nextCalculatePathTime;  // 重新计算下一次路径的时间
@@ -35,13 +35,14 @@ namespace Characters.MovingController
             InitMoveSpeed(moveSpeed);
             _seeker = GetComponent<Seeker>();
             _rgBody = GetComponent<Rigidbody>();
+            // _characterController = GetComponent<CharacterController>();
         }
 
         public void MoveToTarget(GameObject target)
         {
             if (!_enableMoving) return;
             _target = target;
-            _seeker.StartPath(_rgBody.position, target.transform.position, OnPathComplete);  // start an A* path finding
+            _seeker.StartPath(transform.position, target.transform.position, OnPathComplete);  // start an A* path finding
         }
 
         public void EnableMoving()
@@ -60,7 +61,7 @@ namespace Characters.MovingController
             _maxWayPoint = _path.vectorPath.Count - 1;  // minus one减一，是两次寻路无缝衔接
             _nextCalculatePathTime = Time.time + calculateNextPathInterval;  // 计算重新计算一次路径的时间
             _wayPoint = _path.vectorPath[_currentWayPoint];
-            _wayPoint.y = _rgBody.position.y;
+            _wayPoint.y = transform.position.y;
         }
 
         private void Update()
@@ -74,13 +75,13 @@ namespace Characters.MovingController
                 _nextCalculatePathTime = Time.time + calculateNextPathInterval;
             }
 
-            if (Vector2.Distance(_rgBody.position, _wayPoint) < nextWayPointDistance)
+            if (Vector2.Distance(transform.position, _wayPoint) < nextWayPointDistance)
             {
                 // 移动到离下个路径点很近（由nextWayPointDistance衡量）的位置
                 _currentWayPoint++;
                 _wayPoint = _path.vectorPath[_currentWayPoint];
                 _isFaceTurning = true;
-                _wayPoint.y = _rgBody.position.y;
+                _wayPoint.y = transform.position.y;
                 if (_currentWayPoint >= _maxWayPoint)
                 {
                     // reach the second last way point of the path, start new path finding
@@ -101,8 +102,9 @@ namespace Characters.MovingController
         {
             if (!_startMoving) return;
             // // 算出方向的单位向量
-            var direction = (_wayPoint - _rgBody.position).normalized;
+            var direction = (_wayPoint - transform.position).normalized;
             var force = direction * GetMoveSpeed() * Time.deltaTime;
+            // _characterController.Move(force);
             _rgBody.AddForce(force);
         }
 

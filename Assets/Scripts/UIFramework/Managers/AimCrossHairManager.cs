@@ -39,7 +39,6 @@ namespace UIFramework.Managers
         public Vector3 targetPoint;
         private RaycastHit hitInfo;
 
-        public GameObject testBall;
 
         public static AimCrossHairManager Instance { get; private set; }
 
@@ -71,8 +70,6 @@ namespace UIFramework.Managers
                     else LoseEnemyTargeting();
                 }
                 else targetPoint = ray.direction * 500;
-
-                testBall.transform.position = targetPoint;
             }
         }
 

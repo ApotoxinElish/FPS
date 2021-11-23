@@ -88,7 +88,7 @@ Material:
     - _EnableExternalAlpha: 0
     - _Fade: 0.438
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0.507
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0

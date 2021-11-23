@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Start scenario
+/// The Start scene
 /// </summary>
 public class StartScene : SceneState
 {
@@ -46,4 +46,6 @@ public class StartScene : SceneState
         GameRoot.Instance.SetAction(panelManager.Push);
         Debug.Log($"{sceneName} scene loaded!");
     }
+
+    
 }

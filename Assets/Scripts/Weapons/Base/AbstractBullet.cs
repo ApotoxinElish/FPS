@@ -3,16 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbstractBullet : MonoBehaviour
+public abstract class AbstractBullet : MonoBehaviour
 {
 
 
     public float damage;
     public float speed;
     public Vector3 direction;
-    private float destorytime = 10.0f;
-
-    private Rigidbody rb;
+    protected float destorytime = 5.0f;
+    protected Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
@@ -24,14 +23,15 @@ public class AbstractBullet : MonoBehaviour
         Invoke("DestoryBullet",destorytime);
     }
 
-    private void OnTriggerEnter(Collider other) {
-            Destroy(this.gameObject);
-            
+    protected virtual void OnCollisionEnter(Collision other)
+    {
+        DestoryBullet();
+
     }
 
     private void DestoryBullet()
     {
-        Destroy(this);
+        Destroy(this.gameObject);
         Debug.Log("bullet: destory");
     }
 

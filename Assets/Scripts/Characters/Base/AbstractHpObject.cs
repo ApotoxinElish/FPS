@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 namespace AbstractClass
@@ -7,16 +8,21 @@ namespace AbstractClass
     {
         // attached to objects with the HP property
 
-        private int _hp;  // current hp
-        private int _hpMax;  // max hp
+        [SerializeField] protected int hp;  // current hp
+        [SerializeField] protected int hpMax;  // max hp
         private bool _isInvincible = false;  // whether it is invincible
 
         protected abstract void ZeroHpHandle();  // evoked when hp decreases to 0
 
-        protected void SetHp(int initValue)  // init hp values
+        public void SetHp(int initValue)  // init hp values
         {
-            _hpMax = initValue;
-            _hp = initValue;
+            hpMax = initValue;
+            hp = initValue;
+        }
+
+        public int GetHp()
+        {
+            return hp;
         }
 
         public void ToInvincible()
@@ -31,20 +37,20 @@ namespace AbstractClass
 
         public void ExtendHpMaxByValue(int increasedValue)  // extend max hp
         {
-            _hpMax += increasedValue;
+            hpMax += increasedValue;
         }
 
         public void Hurt(int damageValue)  // hurt: hp decreases
         {
-            if (!_isInvincible) return;
-            _hp = Math.Max(_hp - damageValue, 0);
-            if (_hp == 0) ZeroHpHandle();
+            if (_isInvincible) return;
+            hp = Math.Max(hp - damageValue, 0);
+            if (hp == 0) ZeroHpHandle();
         }
 
         public void Heal(int increasedValue)  // heal: hp increases
         {
             if (!_isInvincible) return;
-            _hp = Math.Min(_hp + increasedValue, _hpMax);
+            hp = Math.Min(hp + increasedValue, hpMax);
         }
     }
 }

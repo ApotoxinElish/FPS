@@ -17,66 +17,93 @@ public class AbstractGun : MonoBehaviour
     protected bool reloading;
     protected float currentReloadTime;
 
+    private Animator playerAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
-        currentAmmunition=ammunition;
-        reloading=false;
-        coolDown=float.MaxValue;
-        currentReloadTime=float.MaxValue;
+        currentAmmunition = ammunition;
+        reloading = false;
+        coolDown = float.MaxValue;
+        currentReloadTime = float.MaxValue;
+
+        if(this.transform.root!=this.transform){
+            playerAnimator = this.transform.root.gameObject.GetComponent<Animator>();
+            playerAnimator.SetBool("isReloading", false);
+        }
     }
 
-    void Update() {
-        coolDown+=Time.deltaTime;
-        currentReloadTime+=Time.deltaTime;
+    void Update()
+    {
+        coolDown += Time.deltaTime;
+        currentReloadTime += Time.deltaTime;
+
+        if (reloading == true && currentReloadTime >= reloadTime)
+        {
+            reloading = false;
+            playerAnimator.SetBool("isReloading", false);
+            Debug.Log("finish reloading");
+            currentAmmunition = ammunition;
+        }
     }
 
 
-    public virtual void shoot(){
-        coolDown=0;
+    public virtual void shoot()
+    {
+        coolDown = 0;
         currentAmmunition--;
-        GameObject currentBullet=Instantiate(bullet,transform.position,Quaternion.LookRotation(transform.rotation*Vector3.forward));
-        AbstractBullet prototypeBulletScript=currentBullet.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
-        prototypeBulletScript.damage=bulletDamage;
-        prototypeBulletScript.direction=transform.rotation*Vector3.forward;
-        prototypeBulletScript.speed=bulletSpeed;
+        GameObject currentBullet = Instantiate(bullet, transform.position, Quaternion.LookRotation(transform.rotation * Vector3.forward));
+        AbstractBullet prototypeBulletScript = currentBullet.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
+        prototypeBulletScript.damage = bulletDamage;
+        prototypeBulletScript.direction = transform.rotation * Vector3.forward;
+        prototypeBulletScript.speed = bulletSpeed;
     }
 
-    public virtual void reload(){
-        reloading=true;
-        currentReloadTime=0;
+    public virtual void reload()
+    {
+        reloading = true;
+        currentReloadTime = 0;
+        playerAnimator.SetBool("isReloading", true);
     }
-    public virtual bool inputActivate(){
+    public virtual bool inputActivate()
+    {
         return Input.GetButtonDown("Fire1");
     }
 
-    public virtual bool inputReload(){
-        return false;
+    public virtual bool inputReload()
+    {
+        return Input.GetButtonDown("Reload"); ;
     }
 
-    public virtual void Activate(){
+    public virtual void Activate()
+    {
 
         Debug.Log("activate");
 
 
 
-        if(reloading==true){
+        if (reloading == true)
+        {
             Debug.Log("reloading");
-            if(currentReloadTime>=reloadTime){
-                reloading=false;
+            if (currentReloadTime >= reloadTime)
+            {
+                reloading = false;
+                playerAnimator.SetBool("isReloading", false);
                 Debug.Log("finish reloading");
-                currentAmmunition=ammunition;
+                currentAmmunition = ammunition;
             }
         }
         else
         {
 
-            if(currentAmmunition<=0){
+            if (currentAmmunition <= 0)
+            {
                 Debug.Log("start to reload");
                 reload();
             }
-            else if(coolDown >= 1/fireRate){
-                Debug.Log($"shoot {currentAmmunition-1} left");
+            else if (coolDown >= 1 / fireRate)
+            {
+                Debug.Log($"shoot {currentAmmunition - 1} left");
                 shoot();
             }
             else

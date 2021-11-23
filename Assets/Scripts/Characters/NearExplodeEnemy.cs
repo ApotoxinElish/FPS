@@ -1,5 +1,5 @@
 ﻿using System;
-using AbstractClass;
+using System.Collections.Generic;
 using Characters.MovingController;
 using UnityEngine;
 
@@ -16,17 +16,19 @@ namespace Characters
     public class NearExplodeEnemy : RangeCheckingEnemy
     {
         // the most common enemy, can be inherited
-
-        public int hp;
+        
         public string enemyName;
         public float enterRangeYDistance;
         public float exitRangeYDistance;
         public float exitRangeRadius;
         public GameObject explodeRangeChecker;
         public GameObject explodeRangeParticle;
+        public GameObject explodeSafeParticle;
+        public HudText hudText;
 
         private EnemyMovingController _movingControllerScript;
         private NearExplodeEnemyState _state;
+        private List<GameObject> _chasingTargets;
         private GameObject _chasingTarget;
 
         private Animator _animator;
@@ -34,31 +36,34 @@ namespace Characters
         private static readonly int Chase = Animator.StringToHash("chase");
         private static readonly int Explode = Animator.StringToHash("explode");
 
+        private float nextShootTime;
+
         // debug
         float m_Theta = 0.1f;
 
         private void Start()
         {
-            SetHp(hp);
             _state = NearExplodeEnemyState.Idle;
             _movingControllerScript = GetComponent<EnemyMovingController>();
             _animator = GetComponent<Animator>();
+            _chasingTargets = new List<GameObject>();
         }
         protected override void ZeroHpHandle()
         {
-            Debug.Log($"Enemy with id {GetInstanceID()} retired with 0 hp");
-            Destroy(this);
+            Instantiate(explodeSafeParticle, transform.position, Quaternion.identity);
+            Destroy(gameObject);
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnCollisionEnter(Collision other)
         {
             GameObject otherObj = other.gameObject;
             if (otherObj.layer == LayerMask.NameToLayer("pBullet"))
             {
-                Debug.Log("hit");
-                AbstractBullet bulletScript = otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
-                hp = hp - (int)bulletScript.damage;
-                Destroy(otherObj);
+                // Debug.Log("hit");
+                var bulletScript = otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
+                var damage = (int) bulletScript.damage;
+                Hurt(damage);
+                hudText.HUD(damage);
             }
         }
 
@@ -74,7 +79,7 @@ namespace Characters
                     // var pos1 = new Vector2(position.x, position.z);
                     // var pos2 = new Vector2(targetPosition.x, targetPosition.z);
                     var distancePow = Math.Pow(position.x - targetPosition.x, 2) + Math.Pow(position.z - targetPosition.z, 2);
-                    if (distancePow > Math.Pow(31, 2))
+                    if (distancePow > Math.Pow(35, 2))
                     {
                         // Debug.Log(Vector2.Distance(pos1, pos2));
                         PlayerExit(_chasingTarget);
@@ -93,24 +98,39 @@ namespace Characters
 
         public override void PlayerEnterInnerRange(Collider player)
         {
-            if (!(_chasingTarget is null)) return;
+            if (_chasingTargets.Count == 4) return;
             if (_state == NearExplodeEnemyState.Explode) return;
             if (Math.Abs(player.transform.position.y - transform.position.y) > enterRangeYDistance) return;
-            _chasingTarget = player.gameObject;
-            _movingControllerScript.EnableMoving();
-            _movingControllerScript.MoveToTarget(_chasingTarget);
-            _state = NearExplodeEnemyState.Chase;
-            _animator.SetTrigger(Chase);
+            
+            _chasingTargets.Add(player.gameObject);
+            if (_chasingTarget == null)
+            {
+                _chasingTarget = player.gameObject;
+                _movingControllerScript.EnableMoving();
+                _movingControllerScript.MoveToTarget(_chasingTarget);
+                _state = NearExplodeEnemyState.Chase;
+                _animator.SetTrigger(Chase);
+            }
         }
 
         private void PlayerExit(GameObject obj)
         {
+            if (_chasingTargets.Contains(obj)) _chasingTargets.Remove(obj);
             if (obj.GetInstanceID() == _chasingTarget.GetInstanceID())
             {
-                _chasingTarget = null;
-                _state = NearExplodeEnemyState.Idle;
-                _movingControllerScript.StopMoving();
-                _animator.SetTrigger(Idle);
+                if (_chasingTargets.Count > 0)
+                {
+                    // chase the last entered player
+                    _chasingTarget = _chasingTargets[_chasingTargets.Count - 1];
+                }
+                else
+                {
+                    // no player in target array, set trigger Idle
+                    _chasingTarget = null;
+                    _state = NearExplodeEnemyState.Idle;
+                    _movingControllerScript.StopMoving();
+                    _animator.SetTrigger(Idle);
+                }
             }
         }
 
