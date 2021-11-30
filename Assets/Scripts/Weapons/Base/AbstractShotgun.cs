@@ -25,12 +25,14 @@ public abstract class AbstractShotgun : AbstractGun
     }
 
     public override void shoot(){
+        AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+        audioSource.Play();
         coolDown=0;
         currentAmmunition--;
         for(int i=0;i<projectile;i++){
             Quaternion scattering=getScattering(maxScatteringRadian);
             GameObject currentBullet=Instantiate(bullet,transform.position,Quaternion.LookRotation(scattering*(transform.rotation*Vector3.forward)));
-            PrototypeBullet prototypeBulletScript=currentBullet.GetComponent("PrototypeBullet") as PrototypeBullet;
+            AbstractBullet prototypeBulletScript=currentBullet.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
             prototypeBulletScript.damage=bulletDamage;
             prototypeBulletScript.direction=(scattering*(transform.rotation*Vector3.forward));
             prototypeBulletScript.speed=bulletSpeed;

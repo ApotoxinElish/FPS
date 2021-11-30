@@ -25,11 +25,11 @@ namespace Weapons.Concrete.Guns
         {
             var transform1 = transform;
             var currentBullet = Instantiate(slimeBullet, transform1.position, Quaternion.identity);
-            var bulletScript = currentBullet.GetComponent<SlimeBullet>();
+            AbstractBullet bulletScript = currentBullet.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
+            bulletScript.transform.rotation = transform1.rotation;
             bulletScript.damage = damage;
             bulletScript.direction = transform.rotation * Vector3.forward;
             bulletScript.speed = bulletSpeed;
-            bulletScript.SetVelocity(transform.rotation * Vector3.forward, bulletSpeed);
         }
         
         private void Update()

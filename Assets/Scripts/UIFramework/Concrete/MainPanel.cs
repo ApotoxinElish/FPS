@@ -28,4 +28,28 @@ public class MainPanel : BasePanel
             Push(new SettingPanel());
         });
     }
+
+    public override void OnPause()
+    {
+        base.OnPause();
+        Time.timeScale = 0;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public override void OnResume()
+    {
+        base.OnResume();
+        Time.timeScale = 1f;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public override void OnExit()
+    {
+        base.OnExit();
+        Time.timeScale = 1f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
 }

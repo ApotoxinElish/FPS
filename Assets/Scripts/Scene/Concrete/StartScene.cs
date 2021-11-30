@@ -21,11 +21,13 @@ public class StartScene : SceneState
         {
             SceneManager.LoadScene(sceneName);
             SceneManager.sceneLoaded += SceneLoaded;
+            Debug.Log($"{sceneName} scene change!");
         }
         else
         {
             panelManager.Push(new StartPanel());
             GameRoot.Instance.SetAction(panelManager.Push);
+            Debug.Log($"{sceneName} scene enter!");
         }
     }
 
@@ -33,6 +35,7 @@ public class StartScene : SceneState
     {
         SceneManager.sceneLoaded -= SceneLoaded;
         panelManager.PopAll();
+        Debug.Log($"{sceneName} scene exit!");
     }
 
     /// <summary>
@@ -46,6 +49,4 @@ public class StartScene : SceneState
         GameRoot.Instance.SetAction(panelManager.Push);
         Debug.Log($"{sceneName} scene loaded!");
     }
-
-    
 }

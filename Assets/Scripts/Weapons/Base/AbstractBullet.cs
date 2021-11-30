@@ -26,13 +26,11 @@ public abstract class AbstractBullet : MonoBehaviour
     protected virtual void OnCollisionEnter(Collision other)
     {
         DestoryBullet();
-
     }
 
-    private void DestoryBullet()
+    protected virtual void DestoryBullet()
     {
         Destroy(this.gameObject);
-        Debug.Log("bullet: destory");
     }
 
 }

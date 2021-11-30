@@ -1,24 +1,43 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class RoomManager : MonoBehaviour
 {
     public int ID;
     public bool Finished;
+    public SaveLoadManager SaveLoadManager;
 
     private Transform doorsTran;
+
+    private readonly string[] weaponSet = new string[7]
+    {
+        "CaterpillarRifle", "FireBallPistol", "FireNetShotgun", "LaserRifle", "PrototypePistol", "PrototypeRifle",
+        "PrototypeShotgun"
+    };
 
     // Start is called before the first frame update
     void Start()
     {
         doorsTran=transform.Find("Collisions").Find("Doors");
+        creatRandomWeapon();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Finished=checkFinished();
+        if (!Finished)
+        {
+            Finished=checkFinished();
+            if (Finished)
+            {
+                openDoors();
+                SaveLoadManager.save();
+            }
+        }
+        
     }
 
     private bool checkFinished(){
@@ -38,15 +57,29 @@ public class RoomManager : MonoBehaviour
     public void openDoors(){
         
         for(int i=0; i<doorsTran.childCount; i++){
-            doorsTran.GetChild(i).GetComponent<BoxCollider>().isTrigger=true;
+            Transform doorTran = doorsTran.GetChild(i);
+            doorTran.gameObject.GetComponent<BoxCollider>().isTrigger = true;
+            doorTran.gameObject.GetComponent<MeshRenderer>().enabled = false;
             Debug.Log("RoomManager: open door");
         }
     }
 
     public void closeDoors(){
-         for(int i=0; i<doorsTran.childCount; i++){
-            doorsTran.GetChild(i).GetComponent<BoxCollider>().isTrigger=false;
-            Debug.Log("RoomManager: close door");
-        }
+         for(int i=0; i<doorsTran.childCount; i++)
+         {
+             Transform doorTran = doorsTran.GetChild(i);
+             doorTran.gameObject.GetComponent<BoxCollider>().isTrigger=false;
+             doorTran.gameObject.GetComponent<MeshRenderer>().enabled = true;
+             Debug.Log("RoomManager: close door");
+         }
+    }
+    
+    private void creatRandomWeapon()
+    {
+        Vector3 position = transform.position + new Vector3(Random.Range(-25, 25), 0.5f, Random.Range(-25, 25));
+        String weaponName = weaponSet[Random.Range(0, weaponSet.Length)];
+        GameObject weapon =
+            Resources.Load($"Prefabs/Weapons/GunsToCreate/{weaponName}") as GameObject;
+        Instantiate(weapon, position, Quaternion.identity);
     }
 }

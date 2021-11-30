@@ -3,12 +3,9 @@ using System;
 using System.Collections;
 
 [RequireComponent(typeof(Animator))]
-
 public class IKControl : MonoBehaviour
 {
-
     protected Animator animator;
-
     public bool ikActive = true;
     public Transform leftHandObj = null;
     public Transform lookObj = null;
@@ -23,11 +20,9 @@ public class IKControl : MonoBehaviour
     {
         if (animator)
         {
-
             //if the IK is active, set the position and rotation directly to the goal. 
             if (ikActive)
             {
-
                 // Set the look target position, if one has been assigned
                 if (lookObj != null)
                 {
@@ -45,7 +40,6 @@ public class IKControl : MonoBehaviour
                 }
 
             }
-
             //if the IK is not active, set the position and rotation of the hand and head back to the original position
             else
             {
@@ -56,4 +50,3 @@ public class IKControl : MonoBehaviour
         }
     }
 }
-

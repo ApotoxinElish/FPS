@@ -55,7 +55,7 @@ namespace UIFramework.Managers
             };
             _crossHairImage = GetComponent<Image>(); // get the image component
 
-            ChangeCrossHair(CrossHair.Rifle);  // assign different image to _crossHairImage
+            ChangeCrossHair(CrossHair.Pistol);  // assign different image to _crossHairImage
         }
 
         private void Update()

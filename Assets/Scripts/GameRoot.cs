@@ -32,6 +32,8 @@ public class GameRoot : MonoBehaviour
     private void Start()
     {
         SceneSystem.SetScene(new StartScene());
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     /// <summary>

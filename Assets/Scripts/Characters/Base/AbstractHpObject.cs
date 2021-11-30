@@ -20,6 +20,11 @@ namespace AbstractClass
             hp = initValue;
         }
 
+        public void SetCurrentHp(int curHp)
+        {
+            hp = curHp;
+        }
+
         public int GetHp()
         {
             return hp;
@@ -38,19 +43,21 @@ namespace AbstractClass
         public void ExtendHpMaxByValue(int increasedValue)  // extend max hp
         {
             hpMax += increasedValue;
+            PlayerInfo.Instance.init(hp, hpMax);
         }
 
         public void Hurt(int damageValue)  // hurt: hp decreases
         {
-            if (_isInvincible) return;
+            // if (_isInvincible) return;
             hp = Math.Max(hp - damageValue, 0);
             if (hp == 0) ZeroHpHandle();
         }
 
         public void Heal(int increasedValue)  // heal: hp increases
         {
-            if (!_isInvincible) return;
+            // if (!_isInvincible) return;
             hp = Math.Min(hp + increasedValue, hpMax);
+            PlayerInfo.Instance.init(hp);
         }
     }
 }

@@ -37,7 +37,7 @@ public class UITool
     /// <returns></returns>
     public GameObject FindChildGameObject(string name)
     {
-        Transform[] trans = activePanel.GetComponentsInChildren<Transform>();
+        Transform[] trans = activePanel.GetComponentsInChildren<Transform>(true);
 
         foreach (Transform item in trans)
         {

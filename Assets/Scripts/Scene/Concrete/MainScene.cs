@@ -24,7 +24,7 @@ public class MainScene : SceneState
         }
         else
         {
-            panelManager.Push(new StartPanel());
+            panelManager.Push(new MainPanel());
             GameRoot.Instance.SetAction(panelManager.Push);
         }
     }

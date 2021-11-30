@@ -12,17 +12,8 @@ public class DoorManager : MonoBehaviour
     {
         roomManager=transform.parent.parent.parent.gameObject.GetComponent(typeof(RoomManager)) as RoomManager;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(roomManager.Finished && gameObject.GetComponent<BoxCollider>().isTrigger==false){
-            openDoors();
-        }
-    }
-
+    
     private void OnTriggerEnter(Collider other) {
-        Debug.Log("onTriggerEnter");
         GameObject otherObj=other.gameObject;
         if(roomManager.Finished==false && otherObj.layer==LayerMask.NameToLayer("Player")){
             Invoke("closeDoors", 0.5f);
@@ -33,9 +24,6 @@ public class DoorManager : MonoBehaviour
         roomManager.closeDoors();
         return;
     }
-
-    private void openDoors(){
-        roomManager.openDoors();
-    }
+    
 
 }

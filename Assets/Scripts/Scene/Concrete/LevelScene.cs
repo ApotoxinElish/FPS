@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// The Level1 scene
+/// The Level scene
 /// </summary>
 public class LevelScene : SceneState
 {

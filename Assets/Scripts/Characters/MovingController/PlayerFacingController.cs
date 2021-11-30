@@ -1,8 +1,8 @@
-﻿using System;
-using Cinemachine;
+﻿using Cinemachine;
+using Managers;
 using UnityEngine;
 
-namespace MovingController
+namespace Characters.MovingController
 {
     public class PlayerFacingController : MonoBehaviour
     {
@@ -21,6 +21,7 @@ namespace MovingController
         private float _playerRotateSpeed;  // player rotation angular speed
         public float playerRotateSpeedOri;  // player rotation angular speed commonly (1.5)
         public float playerRotateSpeedLow;  // player rotation angular speed when scaling view filed (0.5)
+        private GameObject _cameraHome;
 
         public GameObject aimObject;  // aim object
         public CinemachineVirtualCamera virtualCamera;  // virtual camera script
@@ -35,10 +36,15 @@ namespace MovingController
         private void Start()
         {
             _playerRotateSpeed = playerRotateSpeedOri;
+            GlobalManager.Instance.AssignVirtualCamera(virtualCamera);
+            _cameraHome = GameObject.Find("Cameras");
+            virtualCamera.transform.parent = _cameraHome.transform;
         }
 
         private void Update()
         {
+            if (!GlobalManager.Instance.IsPlayerAlive()) return;  // player can operate when not retired
+            
             if (_playerRotatable)
             {
                 ChangeYRotationWithValue(Input.GetAxis("Mouse X") * _playerRotateSpeed * dt); // rotate around Y axis

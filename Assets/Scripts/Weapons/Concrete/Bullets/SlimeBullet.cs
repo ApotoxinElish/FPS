@@ -1,20 +1,19 @@
 ﻿using System;
+using Characters;
 using UnityEngine;
 
 namespace Weapons.Concrete.Bullets
 {
     public class SlimeBullet : AbstractBullet
     {
-        public Rigidbody rgBody;
-
-        private void Awake()
+        protected override void OnCollisionEnter(Collision other)
         {
-            rgBody = GetComponent<Rigidbody>();
-        }
-        
-        public void SetVelocity(Vector3 Direction, float Speed)
-        {
-            rgBody.velocity = Direction * Speed;
+            if (other.gameObject.CompareTag("Player"))
+            {
+                var script = other.gameObject.GetComponent<Player>();
+                script.Hurt((int)damage);
+                DestoryBullet();
+            }
         }
     }
 }

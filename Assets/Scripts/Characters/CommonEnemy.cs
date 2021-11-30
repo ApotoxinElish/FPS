@@ -56,6 +56,5 @@ namespace Characters
         {
             throw new System.NotImplementedException();
         }
-
     }
 }

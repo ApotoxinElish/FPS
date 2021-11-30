@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
+using UIFramework.Managers;
 using UnityEngine;
 
 public class AbstractGun : MonoBehaviour
@@ -16,18 +18,23 @@ public class AbstractGun : MonoBehaviour
     protected float coolDown;
     protected bool reloading;
     protected float currentReloadTime;
-
+    public CrossHair crossHair;
+    private SoundEffectControl E1;
+    
     private Animator playerAnimator;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
+        E1 = gameObject.GetComponent<SoundEffectControl>();
+        E1.InitialBGM(gameObject.GetComponent<AudioSource>());
         currentAmmunition = ammunition;
         reloading = false;
         coolDown = float.MaxValue;
         currentReloadTime = float.MaxValue;
 
-        if(this.transform.root!=this.transform){
+        if (this.transform.root != this.transform)
+        {
             playerAnimator = this.transform.root.gameObject.GetComponent<Animator>();
             playerAnimator.SetBool("isReloading", false);
         }
@@ -45,11 +52,14 @@ public class AbstractGun : MonoBehaviour
             Debug.Log("finish reloading");
             currentAmmunition = ammunition;
         }
+
+        PlayerInfo.Instance.setAmmunition(name.Split('(')[0], currentAmmunition, ammunition);
     }
 
 
     public virtual void shoot()
     {
+        E1.PlayEffect(0,0);
         coolDown = 0;
         currentAmmunition--;
         GameObject currentBullet = Instantiate(bullet, transform.position, Quaternion.LookRotation(transform.rotation * Vector3.forward));
@@ -67,14 +77,13 @@ public class AbstractGun : MonoBehaviour
     }
     public virtual bool inputActivate()
     {
-        return Input.GetButtonDown("Fire1");
+        return GlobalManager.Instance.IsPlayerAlive() && Input.GetButtonDown("Fire1");
     }
 
     public virtual bool inputReload()
     {
         return Input.GetButtonDown("Reload"); ;
     }
-
     public virtual void Activate()
     {
 

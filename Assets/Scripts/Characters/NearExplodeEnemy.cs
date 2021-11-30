@@ -24,7 +24,7 @@ namespace Characters
         public GameObject explodeRangeChecker;
         public GameObject explodeRangeParticle;
         public GameObject explodeSafeParticle;
-        public HudText hudText;
+        public DamageCanvas damageCanvas;
 
         private EnemyMovingController _movingControllerScript;
         private NearExplodeEnemyState _state;
@@ -63,7 +63,7 @@ namespace Characters
                 var bulletScript = otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
                 var damage = (int) bulletScript.damage;
                 Hurt(damage);
-                hudText.HUD(damage);
+                damageCanvas.show(damage);
             }
         }
 

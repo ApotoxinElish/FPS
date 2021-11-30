@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Character;
 
 public abstract class AbstractBottle : MonoBehaviour
 {
-    public Player player;
+    //public Player player;
     private int _value; // the value of the bottle
     private float _existTime; // the exist period of the bottle
     private string _type;
@@ -18,13 +17,27 @@ public abstract class AbstractBottle : MonoBehaviour
         _type = type;
     }
 
-    public virtual void ValueUp(GameObject other)
+    public virtual void ValueUp(Collider other)
     {
         Debug.Log("value up"); // call the different user function.
     }
     public void DestoryBottle()
     {
         Destroy(this.gameObject);
+    }
+
+    public void checkCollide()
+    {
+        var hitColliders = Physics.OverlapSphere(transform.position, 0.5f);
+        for (int i = 0; i < hitColliders.Length; i++)
+        {
+            if (hitColliders[i].gameObject.layer == 7)
+            {
+                ValueUp(hitColliders[i]);
+                DestoryBottle();
+            }
+        }
+
     }
 
     public void FadeAnimator()

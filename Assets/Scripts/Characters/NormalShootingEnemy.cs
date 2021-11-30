@@ -25,8 +25,8 @@ namespace Characters
         public SlimeWeapon weapon;
         public Animator animator;
         public Collider enemyCollider;
-        public GameObject slimeModel;
-        public HudText hudText;
+        // public GameObject slimeModel;
+        public DamageCanvas damageCanvas;
 
         private EnemyMovingController _movingControllerScript;
         private NormalShootingState _state;
@@ -66,74 +66,18 @@ namespace Characters
                 AbstractBullet bulletScript = otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
                 var damage = (int) bulletScript.damage;
                 Hurt(damage);
-                hudText.HUD(damage);
+                damageCanvas.show(damage);
             }
-        }
-        
-        private bool HasObjBetweenTwoPosition(Vector3 from, Vector3 to)
-        {
-            Debug.DrawLine(from, to);
-            //发射射线长度为100
-            enemyCollider.enabled = false;
-            var ret = Physics.Linecast(from, to, 1 << 6 | 1 << 11);
-            enemyCollider.enabled = true;
-            if (ret)
-            {
-                Debug.Log("blocked:");
-            }
-            return ret;
         }
 
         private void Update()
         {
-            if (_state == NormalShootingState.Shooting)
+            if (_state == NormalShootingState.Chase)
             {
-                // var pos = transform.position;
-                // pos.y += 0.5f;
-                // if (HasObjBetweenTwoPosition(pos, _chasingTarget.transform.position))
-                // {
-                //     _state = NormalShootingState.Chase;
-                //     animator.SetTrigger(Chase);
-                //     _movingControllerScript.MoveToTarget(_chasingTarget);
-                // }
-
-                Debug.Log(weapon.CanShoot());
                 if (weapon.CanShoot())
                 {
                     animator.SetTrigger(Attack);
                     weapon.Shoot(_chasingTarget.transform);
-                }
-
-                // slowly facing to target
-                var position1 = slimeModel.transform.position;
-                var position2 = _chasingTarget.transform.position;
-                Quaternion quaternion = Quaternion.LookRotation(position2 - position1);
-                transform.rotation = Quaternion.Lerp(slimeModel.transform.rotation, quaternion, turningSpeed * Time.deltaTime);
-            }
-            else if (_state == NormalShootingState.Chase)
-            {
-                // var pos = transform.position;
-                // pos.y += 0.5f;
-                // if (!HasObjBetweenTwoPosition(pos, _chasingTarget.transform.position))
-                // {
-                //     _state = NormalShootingState.Shooting;
-                //     _movingControllerScript.StopMoving();
-                // }
-            }
-            
-            // check whether player leaves range
-            var position = slimeModel.transform.position;
-            var targetPosition = _chasingTarget.transform.position;
-            if (Math.Abs(targetPosition.y - position.y) > exitRangeYDistance) PlayerExit(_chasingTarget);
-            else
-            {
-                // var pos1 = new Vector2(position.x, position.z);
-                // var pos2 = new Vector2(targetPosition.x, targetPosition.z);
-                var distancePow = Math.Pow(position.x - targetPosition.x, 2) + Math.Pow(position.z - targetPosition.z, 2);
-                if (distancePow > Math.Pow(31, 2))
-                {
-                    // Debug.Log(Vector2.Distance(pos1, pos2));
-                    PlayerExit(_chasingTarget);
                 }
             }
         }

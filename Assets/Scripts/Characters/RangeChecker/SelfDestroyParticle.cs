@@ -14,7 +14,6 @@ namespace Characters.RangeChecker
         private void OnParticleSystemStopped()
         {
             Destroy(gameObject);
-            // Debug.Log("recycled");
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Character;
+using Characters;
 using Characters.MovingController;
 using UnityEngine;
 
@@ -19,22 +19,15 @@ public class HealthBottle : AbstractBottle
     // Update is called once per frame
     void Update()
     {
-        
+        checkCollide();
     }
 
-    public override void ValueUp(GameObject other)
+    public override void ValueUp(Collider other)
     {
-        if (other.layer ==7)
-        {
-            var playerMovingScript= other.GetComponent<Player>();
-            playerMovingScript.Heal(health);
-            //other.GetComponent<Player>().Heal(health);
-        }
-        DestoryBottle();
+        var playerMovingScript= other.GetComponent<Player>();
+        playerMovingScript.Heal(health);
+        Debug.Log("recover");
     }
 
-    public void OnCollisionEnter(Collision other)
-    {   
-        ValueUp(other.gameObject);
-    }
+
 }

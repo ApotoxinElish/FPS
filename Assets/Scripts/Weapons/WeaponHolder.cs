@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UIFramework.Managers;
 public class WeaponHolder : MonoBehaviour
 {
     public GameObject oriWeapon;
+    public CrossHair crossHair;
 
     public GameObject weapon;
     public string weaponName;
@@ -41,6 +43,7 @@ public class WeaponHolder : MonoBehaviour
         {
             weaponScript.Activate();
         }
+        
     }
 
     void switchWeapon(GameObject newWeapon)
@@ -52,7 +55,6 @@ public class WeaponHolder : MonoBehaviour
         BoxCollider boxCollider=weapon.GetComponent<BoxCollider>();
         Destroy(rigidbody);
         Destroy(boxCollider);
-        Debug.Log("destory");
 
         weaponScript = weapon.GetComponent(typeof(AbstractGun)) as AbstractGun;
         Destroy(newWeapon);
@@ -60,15 +62,22 @@ public class WeaponHolder : MonoBehaviour
         GameObject player=this.transform.root.gameObject;
         IKControl pIK=player.GetComponent(typeof(IKControl)) as IKControl;
         pIK.leftHandObj=weapon.transform.Find("leftHandLocation");
-        return;
+    }
+
+    public String getWeaponName()
+    {
+        return weapon.name.Split('(')[0];
     }
 
     private void OnTriggerEnter(Collider other) {
 
         GameObject otherObj=other.gameObject;
+        var gunScript = other.GetComponent<AbstractGun>();
         if(otherObj.layer==LayerMask.NameToLayer("Weapon")){
             Debug.Log("find a weapon");
             switchWeapon(otherObj);
+            AimCrossHairManager.Instance.ChangeCrossHair(gunScript.crossHair);
         }
     }
+    
 }

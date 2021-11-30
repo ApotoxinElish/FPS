@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Managers;
 using UnityEngine;
 
 namespace Characters.MovingController
@@ -13,10 +14,11 @@ namespace Characters.MovingController
         private Vector3 _impact = Vector3.zero;
 
         private Animator animator;
-
+        private static AudioSource Sound;
 
         private bool isCrouched;
         private float originHeight;
+        private static SoundEffectControl E1;
 
         public float SprintingSpeed;
         public float WalkSpeed;
@@ -29,19 +31,35 @@ namespace Characters.MovingController
         public float CrouchHeight = 1f;
 
         public float mass;
-
+        
+        //public AudioClip[] WalkSound;
+        //public AudioClip[] JumpSound;
         private void Start()
         {
+            //Sound = gameObject.GetComponent<AudioSource>();
+            E1 = gameObject.GetComponent<SoundEffectControl>();
+            E1.InitialBGM(gameObject.GetComponent<AudioSource>());
+            E1.debug();
             characterController = GetComponent<CharacterController>();
             characterAnimator = GetComponentInChildren<Animator>();
             characterTransform = transform;
             originHeight = characterController.height;
-            animator=gameObject.GetComponent<Animator>();
+            animator = gameObject.GetComponent<Animator>();
         }
 
         private void Update()
         {
             UpdateImpact();
+            if (!GlobalManager.Instance.IsPlayerAlive())
+            {
+                var tmp_Velocity = characterController.velocity;
+                tmp_Velocity.y = 0;
+                velocity = tmp_Velocity.magnitude;
+                movementDirection.y -= Gravity * Time.deltaTime;
+                characterController.Move(WalkSpeed * Time.deltaTime * movementDirection);
+                return;
+            }
+
             float tmp_CurrentSpeed = WalkSpeed;
             if (characterController.isGrounded)
             {
@@ -50,16 +68,21 @@ namespace Characters.MovingController
                 movementDirection =
                     characterTransform.TransformDirection(new Vector3(tmp_Horizontal, 0, tmp_Vertical));
 
-                animator.SetBool("isMovingF",tmp_Vertical>0);
-                animator.SetBool("isMovingB",tmp_Vertical<0);
-                animator.SetBool("isMovingR",tmp_Horizontal>0);
-                animator.SetBool("isMovingL",tmp_Horizontal<0);
-                animator.SetBool("isMoving", tmp_Horizontal!=0||tmp_Vertical!=0);
-
+                animator.SetBool("isMovingF", tmp_Vertical > 0);
+                animator.SetBool("isMovingB", tmp_Vertical < 0);
+                animator.SetBool("isMovingR", tmp_Horizontal > 0);
+                animator.SetBool("isMovingL", tmp_Horizontal < 0);
+                animator.SetBool("isMoving", tmp_Horizontal != 0 || tmp_Vertical != 0);
+                if (!E1.SoundIsplaying() && (tmp_Horizontal != 0 || tmp_Vertical != 0))
+                {
+                    E1.PlayEffect(0,Random.Range(0,E1.SoundSource[0].Length));
+                }
 
 
                 if (Input.GetButtonDown("Jump"))
                 {
+                    E1.PlayEffect(1,Random.Range(1,E1.SoundSource[1].Length));
+                    SoundEffectControl.ChangeVolume(0.6f);
                     movementDirection.y = JumpHeight;
                 }
 
@@ -100,9 +123,10 @@ namespace Characters.MovingController
                         ref tmp_CurrentHeight, Time.deltaTime * 5);
             }
         }
-        
+
         // added
-        public void AddImpact(Vector3 dir, float force){
+        public void AddImpact(Vector3 dir, float force)
+        {
             dir.Normalize();
             if (dir.y < 0) dir.y = -dir.y; // reflect down force on the ground
             _impact += dir.normalized * force / mass;
@@ -115,5 +139,6 @@ namespace Characters.MovingController
             // consumes the impact energy each cycle:
             _impact = Vector3.Lerp(_impact, Vector3.zero, 5 * Time.deltaTime);
         }
+
     }
 }

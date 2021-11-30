@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Character;
 using Characters.MovingController;
-using MovingController;
 using TMPro;
 using UnityEngine;
 
@@ -49,12 +47,14 @@ namespace Characters.RangeChecker
             var distance = Vector3.Distance(playerPos, position);
             
             // player hurt
-            playerScript.Hurt((int)(Math.Pow(21 - distance, 2) * 0.25));
+            var hurt = (int) (Math.Pow(21 - distance, 2) * 0.25);
+            playerScript.Hurt(hurt);
+            // Debug.Log($"player hurt: {hurt}");
+            PlayerInfo.Instance.lossHp(hurt);
 
             var direction = (playerPos - position).normalized;
             var force = Mathf.Clamp(explosionPower * (21 - distance), 0, 1000);
             playerMovingScript.AddImpact(direction, force);
-            Debug.Log("fly");
         }
     }
 }

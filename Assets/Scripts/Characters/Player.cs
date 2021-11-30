@@ -1,22 +1,52 @@
-﻿using System;
-using AbstractClass;
+﻿using AbstractClass;
+using Cinemachine;
+using Managers;
 using UnityEngine;
 
-namespace Character
+namespace Characters
 {
     public class Player : AbstractHpObject
     {
         public string playerName;
+        public float playerFallYPos;
 
         public GameObject weaponHolder;
 
         private void Start()
         {
-            SetHp(hp);
+            PlayerInfo.Instance.init(hp, hpMax);
+            // Debug.Log($"player hp: {hp}");
+            GlobalManager.Instance.AssignMainPlayer(this);
+            GlobalManager.Instance.SetSavePoint(transform.position);
         }
+        private void Update()
+        {
+            if (transform.position.y < -50)
+            {
+                Debug.Log("DIE");
+                SaveLoadManager.Instance.clearSaveData();
+                GameRoot.Instance.SceneSystem.SetScene(new EndScene("YOU DIE"));
+            }
+
+            if (GlobalManager.Instance.IsPlayerAlive())
+            {
+                if (transform.position.y < playerFallYPos)
+                {
+                    GlobalManager.Instance.PlayerRetireFalling();
+                }
+            }
+
+            if (hp <= 0)
+            {
+                SaveLoadManager.Instance.clearSaveData();
+                GameRoot.Instance.SceneSystem.SetScene(new EndScene("YOU DIE"));
+            }
+        }
+
         protected override void ZeroHpHandle()
         {
-            Debug.Log("Player retires with 0 hp");
+            Debug.Log(" ===================== Player retires with 0 hp =====================");
+            
         }
 
         private void OnCollisionEnter(Collision other)
@@ -26,8 +56,26 @@ namespace Character
             {
                 // Debug.Log("hit");
                 var bulletScript = otherObj.GetComponent(typeof(AbstractBullet)) as AbstractBullet;
-                Hurt((int)bulletScript.damage);
+                int dmg = (int)bulletScript.damage;
+                Hurt(dmg);
+                PlayerInfo.Instance.lossHp(dmg);
             }
+        }
+
+        public void ThirdPerson()
+        {
+            CinemachineVirtualCamera cinemachineVirtualCamera =
+                GameObject.Find("CM").gameObject.GetComponent(typeof(CinemachineVirtualCamera)) as
+                    CinemachineVirtualCamera;
+            cinemachineVirtualCamera.Follow = transform.Find("aim3");
+        }
+
+        public void FirstPerson()
+        {
+            CinemachineVirtualCamera cinemachineVirtualCamera =
+                GameObject.Find("CM").gameObject.GetComponent(typeof(CinemachineVirtualCamera)) as
+                    CinemachineVirtualCamera;
+            cinemachineVirtualCamera.Follow = transform.Find("aim1");
         }
     }
 }

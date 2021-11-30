@@ -9,24 +9,24 @@ namespace UIFramework.Managers
 
         private void Update()
         {
-            // target face north
+            // // target face north
             var transform1 = transform;
-            var transformRotation = transform1.rotation;
-            
-            var angles = transformRotation.eulerAngles;
-            var x = angles.x;
-            var y = followTarget.rotation.eulerAngles.y;
-            var z = angles.z;
-
-            transformRotation.eulerAngles = new Vector3(x, y, z);
-            transform1.rotation = transformRotation;
+            // var transformRotation = transform1.rotation;
+            //
+            // var angles = transformRotation.eulerAngles;
+            // var x = angles.x;
+            // var y = followTarget.rotation.eulerAngles.y;
+            // var z = angles.z;
+            //
+            // transformRotation.eulerAngles = new Vector3(x, y, z);
+            // transform1.rotation = transformRotation;
 
             // move with target
             var transformPosition = transform1.position;
             var targetPosition = followTarget.position;
-            x = targetPosition.x;
-            y = transformPosition.y;
-            z = targetPosition.z;
+            var x = targetPosition.x;
+            var y = transformPosition.y;
+            var z = targetPosition.z;
             transform1.position = new Vector3(x, y, z);
         }
     }

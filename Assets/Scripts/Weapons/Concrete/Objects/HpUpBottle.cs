@@ -1,7 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Characters;
 using UnityEngine;
-using Character;
 using Characters.MovingController;
 
 public class HpUpBottle : AbstractBottle
@@ -14,21 +15,18 @@ public class HpUpBottle : AbstractBottle
     {
         SetValue(HpUp,time,type);
     }
-    
 
-    public override void ValueUp(GameObject other)
+    private void Update()
     {
-        if (other.layer ==7)
-        {
-            var playerMovingScript= other.GetComponent<Player>();
-            playerMovingScript.ExtendHpMaxByValue(HpUp);
-            //other.GetComponent<Player>().Heal(health);
-        }
-        DestoryBottle();
+        checkCollide();
     }
 
-    public void OnCollisionEnter(Collision other)
-    {   
-        ValueUp(other.gameObject);
+    public override void ValueUp(Collider other)
+    {
+       var playerMovingScript= other.GetComponent<Player>();
+       playerMovingScript.ExtendHpMaxByValue(HpUp);
+       Debug.Log("HpUP!");
+
     }
+    
 }
